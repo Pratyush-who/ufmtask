@@ -161,235 +161,235 @@ class _OTPScreenState extends ConsumerState<OTPScreen>
 
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 60),
-
-                  // Back button
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: IconButton(
-                      onPressed: () => Navigator.pop(context),
-                      icon: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  // Logo with scale animation
-                  ScaleTransition(
-                    scale: _scaleAnim,
-                    child: Container(
-                      width: 80,
-                      height: 80,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF20B40A),
-                        borderRadius: BorderRadius.circular(40),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF20B40A).withOpacity(0.3),
-                            blurRadius: 20,
-                            spreadRadius: 5,
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.message,
-                        color: Colors.white,
-                        size: 40,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  // Title and subtitle with fade animation
-                  FadeTransition(
-                    opacity: _fadeAnim,
-                    child: Column(
-                      children: [
-                        Text(
-                          'Enter OTP',
-                          style: GoogleFonts.sora(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'We\'ve sent a verification code to',
-                          style: GoogleFonts.sora(
-                            color: Colors.white60,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          _formatPhoneNumber(widget.phone),
-                          style: GoogleFonts.sora(
-                            color: const Color(0xFF20B40A),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  // OTP input boxes with slide animation
-                  SlideTransition(
-                    position: _slideAnim,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: List.generate(6, (index) {
-                        return Container(
-                          width: 45,
-                          height: 55,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF787880),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: _focusNodes[index].hasFocus
-                                  ? const Color(0xFF20B40A)
-                                  : Colors.transparent,
-                              width: 2,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 120), // space below back button
+                    // Logo with scale animation
+                    ScaleTransition(
+                      scale: _scaleAnim,
+                      child: Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF20B40A),
+                          borderRadius: BorderRadius.circular(40),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF20B40A).withOpacity(0.3),
+                              blurRadius: 20,
+                              spreadRadius: 5,
                             ),
-                          ),
-                          child: TextField(
-                            controller: _otpControllers[index],
-                            focusNode: _focusNodes[index],
-                            keyboardType: TextInputType.number,
-                            textAlign: TextAlign.center,
-                            maxLength: 1,
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.message,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 40),
+
+                    // Title and subtitle with fade animation
+                    FadeTransition(
+                      opacity: _fadeAnim,
+                      child: Column(
+                        children: [
+                          Text(
+                            'Enter OTP',
                             style: GoogleFonts.sora(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            'We\'ve sent a verification code to',
+                            style: GoogleFonts.sora(
+                              color: Colors.white60,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            _formatPhoneNumber(widget.phone),
+                            style: GoogleFonts.sora(
+                              color: const Color(0xFF20B40A),
+                              fontSize: 16,
                               fontWeight: FontWeight.w600,
                             ),
-                            decoration: const InputDecoration(
-                              counterText: '',
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.all(0),
-                            ),
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly,
-                            ],
-                            onChanged: (value) => _onOTPChanged(value, index),
-                          ),
-                        );
-                      }),
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  // Continue button with animation
-                  SlideTransition(
-                    position: _slideAnim,
-                    child: Container(
-                      width: double.infinity,
-                      height: 56,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF20B40A), Color(0xFF1A9308)],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF20B40A).withOpacity(0.3),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
                           ),
                         ],
                       ),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          foregroundColor: Colors.white,
-                          shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                    ),
+
+                    const SizedBox(height: 40),
+
+                    // OTP input boxes with slide animation
+                    SlideTransition(
+                      position: _slideAnim,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: List.generate(6, (index) {
+                          return Container(
+                            width: 45,
+                            height: 55,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF787880),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: Colors.transparent,
+                                width: 2,
+                              ),
+                            ),
+                            child: TextField(
+                              controller: _otpControllers[index],
+                              focusNode: _focusNodes[index],
+                              keyboardType: TextInputType.number,
+                              textAlign: TextAlign.center,
+                              maxLength: 1,
+                              style: GoogleFonts.sora(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              decoration: const InputDecoration(
+  counterText: '',
+  contentPadding: EdgeInsets.all(0),
+  border: InputBorder.none,
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide.none,
+  ),
+  enabledBorder: OutlineInputBorder(
+    borderSide: BorderSide.none,
+  ),
+),
+
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+                              onChanged: (value) => _onOTPChanged(value, index),
+                            ),
+                          );
+                        }),
+                      ),
+                    ),
+
+                    const SizedBox(height: 40),
+
+                    SlideTransition(
+                      position: _slideAnim,
+                      child: Container(
+                        width: double.infinity,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF20B40A), Color(0xFF1A9308)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF20B40A).withOpacity(0.3),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                        onPressed: state.isLoading ? null : _submitOTP,
-                        child: state.isLoading
-                            ? const SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: Colors.white,
+                            shadowColor: Colors.transparent,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          onPressed: state.isLoading ? null : _submitOTP,
+                          child: state.isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  'Continue',
+                                  style: GoogleFonts.sora(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              )
-                            : Text(
-                                'Continue',
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 32),
+
+                    // Resend OTP section
+                    FadeTransition(
+                      opacity: _fadeAnim,
+                      child: _seconds > 0
+                          ? Column(
+                              children: [
+                                Text(
+                                  'Didn\'t receive the code?',
+                                  style: GoogleFonts.sora(
+                                    color: Colors.white60,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Resend in $_seconds seconds',
+                                  style: GoogleFonts.sora(
+                                    color: Colors.white70,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : TextButton(
+                              onPressed: _resendOTP,
+                              child: Text(
+                                'Resend OTP',
                                 style: GoogleFonts.sora(
+                                  color: const Color(0xFF20B40A),
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // Resend OTP section with fade animation
-                  FadeTransition(
-                    opacity: _fadeAnim,
-                    child: _seconds > 0
-                        ? Column(
-                            children: [
-                              Text(
-                                'Didn\'t receive the code?',
-                                style: GoogleFonts.sora(
-                                  color: Colors.white60,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                'Resend in $_seconds seconds',
-                                style: GoogleFonts.sora(
-                                  color: Colors.white70,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          )
-                        : TextButton(
-                            onPressed: _resendOTP,
-                            child: Text(
-                              'Resend OTP',
-                              style: GoogleFonts.sora(
-                                color: const Color(0xFF20B40A),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
                             ),
-                          ),
-                  ),
+                    ),
 
-                  const SizedBox(height: 60),
-                ],
+                    const SizedBox(height: 60),
+                  ],
+                ),
               ),
             ),
-          ),
+
+            // Back Button at top-left
+            Positioned(
+              top: 16,
+              left: 8,
+              child: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+              ),
+            ),
+          ],
         ),
       ),
     );
